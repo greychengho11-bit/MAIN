@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mini Games Untuk Jesen 💗</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Quicksand', sans-serif;
+}
+
+body{
+overflow:hidden;
+background: linear-gradient(135deg,#ffd6e7,#d6f0ff,#efe1ff,#ffe8d6);
+height:100vh;
+}
+
+/* screen */
+.screen{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+transition:1s;
+}
+
+.hidden{
+opacity:0;
+pointer-events:none;
+transform:scale(.9);
+}
+
+/* button */
+button{
+padding:14px 28px;
+border:none;
+border-radius:20px;
+background:linear-gradient(45deg,#ff9acb,#a8e6ff);
+color:white;
+font-size:16px;
+cursor:pointer;
+box-shadow:0 10px 20px rgba(0,0,0,.1);
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.05);
+}
+
+/* floating hearts */
+.heart{
+position:absolute;
+color:#ff7aa2;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh) scale(0)}
+100%{transform:translateY(-10vh) scale(1)}
+}
+
+/* game area */
+.game{
+margin-top:20px;
+}
+
+/* falling hearts */
+.fall{
+position:absolute;
+font-size:24px;
+cursor:pointer;
+}
+
+
+/* love meter */
+.meter{
+width:300px;
+height:20px;
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+margin-top:20px;
+}
+
+.bar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#ff8ec7,#9be7ff);
+transition:2s;
+}
+
+/* confetti */
+.confetti{
+position:absolute;
+font-size:20px;
+animation:confetti 3s linear infinite;
+}
+
+@keyframes confetti{
+0%{transform:translateY(-10vh)}
+100%{transform:translateY(110vh)}
+}
+
+</style>
+</head>
+
+<body>
+
+<audio autoplay loop id="music">
+<source src="https://cdn.pixabay.com/audio/2022/03/15/audio_c8c8a73467.mp3">
+</audio>
+
+<!-- SCREEN 1 -->
+<div class="screen" id="welcome">
+<h1>Mini Games Untuk Jesen 💗</h1>
+<p>Dari Greynathan yang selalu sayang kamu</p>
+<br>
+<button onclick="start()">Mulai Main Yuk Thayang 💕</button>
+</div>
+
+<!-- GAME 1 -->
+<div class="screen hidden" id="game1">
+<h2>Tangkap Hati 💖</h2>
+<div>Score: <span id="score">0</span></div>
+</div>
+
+<!-- GAME 2 -->
+<div class="screen hidden" id="game2">
+<h2>Puzzle Cinta 🧩</h2>
+<div class="puzzle" id="puzzle"></div>
+</div>
+
+<!-- GAME 3 -->
+<div class="screen hidden" id="game3">
+<h2>Tebak Kata Gemes 💌</h2>
+<input id="guess" placeholder="Tebak..." style="padding:10px;border-radius:10px;border:none">
+<br><br>
+<button onclick="check()">Tebak</button>
+<p id="status"></p>
+</div>
+
+<!-- GAME 4 -->
+<div class="screen hidden" id="game4">
+<h2>Klik Aku Dong 🥺</h2>
+<button id="run">Klik Aku</button>
+</div>
+
+<!-- GAME 5 -->
+<div class="screen hidden" id="game5">
+<h2>Love Meter 💓</h2>
+<button onclick="love()">Hitung Cinta</button>
+
+<div class="meter">
+<div class="bar" id="bar"></div>
+</div>
+
+<p id="loveText"></p>
+</div>
+
+<!-- ENDING -->
+<div class="screen hidden" id="end">
+<h1>Untuk Jesen 🤍</h1>
+<p>
+Sejak 15 Februari 2026,<br>
+aku bahagia banget bisa jadi milik kamu,<br>
+terima kasih sudah hadir di hidupku,<br>
+aku sayang kamu Jesen 🤍
+</p>
+</div>
+
+<script>
+
+let screens=document.querySelectorAll(".screen")
+
+function show(id){
+screens.forEach(s=>s.classList.add("hidden"))
+document.getElementById(id).classList.remove("hidden")
+}
+
+function start(){
+show("game1")
+fallHearts()
+}
+
+/* floating hearts */
+setInterval(()=>{
+let h=document.createElement("div")
+h.className="heart"
+h.innerHTML="💗"
+h.style.left=Math.random()*100+"vw"
+document.body.appendChild(h)
+setTimeout(()=>h.remove(),6000)
+},500)
+
+/* GAME 1 */
+let score=0
+
+function fallHearts(){
+let interval=setInterval(()=>{
+let h=document.createElement("div")
+h.className="fall"
+h.innerHTML="💖"
+h.style.left=Math.random()*100+"vw"
+h.style.top="-50px"
+
+document.body.appendChild(h)
+
+let drop=setInterval(()=>{
+h.style.top=h.offsetTop+4+"px"
+if(h.offsetTop>window.innerHeight){
+h.remove()
+clearInterval(drop)
+}
+},20)
+
+h.onclick=()=>{
+score++
+document.getElementById("score").innerText=score
+h.remove()
+
+if(score==20){
+alert("Jesen berhasil menangkap hati Greynathan selamanya 💞")
+clearInterval(interval)
+setTimeout(()=>show("game2"),1000)
+}
+}
+
+},800)
+}
+
+/* GAME 2 PUZZLE */
+let puzzle=document.getElementById("puzzle")
+
+let order=[0,1,2,3,4,5,6,7,8].sort(()=>Math.random()-0.5)
+
+order.forEach(i=>{
+let p=document.createElement("div")
+p.className="piece"
+p.style.backgroundImage="url('https://i.imgur.com/8Km9tLL.jpg')"
+p.style.backgroundPosition=
+(i%3)*-100+"px "+Math.floor(i/3)*-100+"px"
+p.draggable=true
+
+p.ondragstart=e=>drag=i
+p.ondragover=e=>e.preventDefault()
+p.ondrop=e=>{
+let from=drag
+let to=i
+location.reload()
+}
+
+puzzle.appendChild(p)
+})
+
+/* GAME 3 */
+let words=["SAYANG","CINTA","JESEN","GREY"]
+let index=0
+
+function check(){
+let val=document.getElementById("guess").value.toUpperCase()
+
+if(val==words[index]){
+index++
+document.getElementById("status").innerHTML="Benar 💗"
+
+if(index==words.length){
+setTimeout(()=>{
+alert("Kamu sudah membuka semua perasaan Greynathan")
+show("game4")
+},800)
+}
+}else{
+document.getElementById("status").innerHTML="Coba lagi 🥺"
+}
+}
+
+/* GAME 4 */
+let btn=document.getElementById("run")
+
+btn.onmouseover=()=>{
+btn.style.position="absolute"
+btn.style.left=Math.random()*80+"vw"
+btn.style.top=Math.random()*80+"vh"
+}
+
+btn.onclick=()=>{
+alert("Kamu berhasil dapetin pelukan virtual 🤍")
+show("game5")
+}
+
+/* GAME 5 */
+function love(){
+document.getElementById("bar").style.width="100%"
+document.getElementById("loveText").innerHTML=
+"Cinta Greynathan ke Jesen: 100000000%"
+
+setTimeout(()=>{
+show("end")
+confetti()
+},2500)
+}
+
+/* confetti */
+function confetti(){
+setInterval(()=>{
+let c=document.createElement("div")
+c.className="confetti"
+c.innerHTML="💖"
+c.style.left=Math.random()*100+"vw"
+document.body.appendChild(c)
+setTimeout(()=>c.remove(),3000)
+},200)
+}
+
+</script>
+
+</body>
+</html>
